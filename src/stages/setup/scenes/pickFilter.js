@@ -1,6 +1,6 @@
 import { Markup, Scenes } from "telegraf";
 
-const pickFilterScene = new Scenes.BaseScene("pickFilter");
+export const pickFilterScene = new Scenes.BaseScene("pickFilter");
 
 pickFilterScene.enter((ctx) => {
     ctx.session.newFilter = ctx.session.newFilter || {};
@@ -19,22 +19,26 @@ pickFilterScene.enter((ctx) => {
 
 pickFilterScene.action("text", (ctx) => {
     ctx.deleteMessage();
+    
     ctx.scene.enter("setText");
 });
+
 pickFilterScene.action("regionCode", (ctx) => {
     ctx.deleteMessage();
+
     ctx.scene.enter("setRegionCode")
 });
+
 pickFilterScene.action("done", (ctx) => {
-    if (Object.keys(ctx.session.newFilters).length) {
+    if (Object.keys(ctx.session.newFilter).length) {
         ctx.session.filter = {
             ...ctx.session.filter,
-            ...ctx.session.newFilters,
+            ...ctx.session.newFilter,
         };
 
         ctx.session.newFilter = {};
 
-        return ctx.editMessageText("Фильтры успешно обновлены")
+        return ctx.editMessageText("Фильтры успешно обновлены!")
     } else {
         ctx.deleteMessage();
     }
